@@ -5,9 +5,9 @@ ensureAccessTokenAssigned();
 
 var hasGotAccess = hasAccess();
 console.log("has access: " + hasGotAccess);
-if (!hasGotAccess) {
+if (window.location.href.indexOf("login") === -1 && !hasGotAccess) {
     console.log("GoTo Login");
-    goToLogin();
+    window.location.href = "../views/login.html";
 }
 
 function ensureAccessTokenAssigned()
@@ -31,15 +31,13 @@ function hasAccess() {
     return player.access_token === "1234";
 }
 
-function goToLogin()
+function goTo(htmlPartialRef)
 {
-    var href = "../views/login.html";
-    if(player !== null)
-    {
-        href += "?access_token=" + player.access_token;
-    }
+    var htmlRef = "../views/" + htmlPartialRef;
 
-    window.location.href = "../views/login.html";
+    htmlRef += "?access_token=" + player.access_token;
+
+    window.location.href = htmlRef;
 }
 
 function commonContent() {
@@ -47,6 +45,16 @@ function commonContent() {
         client.open('GET', '../views/partialCommon.html');
         client.onreadystatechange = function() {
             var element = document.getElementById('common-content');
+            if (element) element.innerHTML = client.responseText;
+        }
+        client.send();
+}
+
+function addNav() {
+    var client = new XMLHttpRequest();
+        client.open('GET', '../views/partialNav.html');
+        client.onreadystatechange = function() {
+            var element = document.getElementById('nav');
             if (element) element.innerHTML = client.responseText;
         }
         client.send();
