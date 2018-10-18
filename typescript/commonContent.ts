@@ -3,6 +3,12 @@ var player = new Player(null);
 
 ensureAccessTokenAssigned();
 
+function shouldNotBeNull(options: any, lid: number) {
+    if(!options) {
+        throw new Error(`Unexpected Null. Lid: ${lid}`);
+    }
+}
+
 var hasGotAccess = hasAccess();
 console.log("has access: " + hasGotAccess);
 if (window.location.href.indexOf("login") === -1 && !hasGotAccess) {
@@ -31,7 +37,7 @@ function hasAccess() {
     return player.access_token === "1234";
 }
 
-function goTo(htmlPartialRef)
+function goTo(htmlPartialRef: string)
 {
     var htmlRef = "../views/" + htmlPartialRef;
 
@@ -60,7 +66,7 @@ function addNav() {
         client.send();
 }
 
-function getQueryString(field) {
+function getQueryString(field: string) {
     var queryStrings = window.location.href.split('?')[1];
     if(queryStrings) {
         var pairsAsArray = queryStrings.split("&");
