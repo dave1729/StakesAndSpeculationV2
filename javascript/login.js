@@ -1,14 +1,16 @@
 "use strict";
 function newPlayer() {
-    var userNameElement = document.getElementById("user-name-input");
+    var userNameElement = document.getElementById("username-input");
     var passwordElement = document.getElementById("password-input");
-    var userName = userNameElement == null ? "" : userNameElement.innerHTML;
-    var password = passwordElement == null ? "" : passwordElement.innerHTML;
-    if (password != null && userName != null) {
+    var userName = userNameElement == null ? "" : userNameElement.value;
+    var password = passwordElement == null ? "" : passwordElement.value;
+    if (password !== "" && userName !== "") {
+        console.log("password and name accepted.");
         var saltedPassword = hash(password);
-        player = new Player({ name: userName, access_token: saltedPassword });
+        var newUser = new User({ name: userName, access_token: saltedPassword });
+        player = new Player({ user: newUser });
     }
     else {
-        alert("Bad Password.");
+        alert("Bad Password: " + password + ". Or user name: " + userName + ".");
     }
 }

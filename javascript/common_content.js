@@ -1,31 +1,4 @@
 "use strict";
-console.log("Assigning Empty Player");
-var player;
-ensureAccessTokenAssigned();
-function ensureAccessTokenAssigned() {
-    // ToDo: Get Player Info From Storage Here, using access_token. 
-    // if(player && !player.access_token)
-    // {
-    console.log("Getting token from URL");
-    var accessToken = getQueryString("access_token");
-    player = new Player({ name: "Temp Name", access_token: accessToken });
-    // }
-}
-function getQueryString(field) {
-    var queryStrings = window.location.href.split('?')[1];
-    if (queryStrings) {
-        var pairsAsArray = queryStrings.split("&");
-        if (pairsAsArray) {
-            for (var i = 0; i < pairsAsArray.length; i++) {
-                var pair = pairsAsArray[i].split("=");
-                if (pair && pair[0].toUpperCase() === field.toUpperCase()) {
-                    return pair[1];
-                }
-            }
-        }
-    }
-    return null;
-}
 function shouldNotBeNull(options, lid) {
     if (!options) {
         throw new Error("Unexpected Null. Lid: " + lid);
@@ -52,16 +25,16 @@ if (window.location.href.indexOf("login") === -1 && !hasGotAccess) {
 }
 function hasAccess() {
     console.log("Just assigning token during has access...");
-    if (player && player.access_token) {
+    if (player != null && player.accessTokenOrNull() != null) {
         return true;
     }
     return false;
 }
 function goTo(htmlPartialRef) {
     var htmlRef = "../views/" + htmlPartialRef;
-    if (player != null && player.access_token != null) {
+    if (player != null && player.accessTokenOrNull() != null) {
         console.log("Preserving player access_token.");
-        htmlRef += "?access_token=" + player.access_token;
+        htmlRef += "?access_token=" + player.user.access_token;
     }
     else {
         console.log("Not preserving player access_token. ");

@@ -1,6 +1,5 @@
 class Player {
-    public access_token: string;
-    public name: string;
+    public user: User;
     public color: string;
     public money: number;
     public answers: Array<Answer>;
@@ -8,16 +7,14 @@ class Player {
 
     constructor(options: any) {
         if(options == null) {
-            this.access_token = "1234";
-            this.name = "Temp Player Name";
+            this.user = new User(null);
             this.color = "red";
             this.money = 0;
             this.answers = new Array<Answer>();
             this.bets = new Array<Bet>();
         }
         else {
-            this.access_token = options.access_token;
-            this.name = options.name;
+            this.user = options.user;
             this.color = options.color;
             this.money = options.money;
             this.answers = new Array<Answer>();
@@ -33,5 +30,15 @@ class Player {
 
     addAnswer(answer: Answer, questionIndex: number) {
         this.answers[questionIndex] = answer;
+    }
+
+    accessTokenOrNull() {
+        if(this.user != null &&
+           this.user.access_token != null &&
+           this.user.access_token != "") {
+                return this.user.access_token;
+        }
+
+        return null;
     }
 }
