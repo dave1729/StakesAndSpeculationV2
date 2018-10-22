@@ -11,7 +11,12 @@ function newUser(){
 
         user = new User({ name: userName, access_token: saltedPassword });
 
-        getUsers(saveNewUser);
+        if(users == null || users == undefined) {
+            getUsers(saveNewUser);
+        }
+        else {
+            saveNewUser(users);
+        }
     }
     else {
         alert(`Bad Password: ${password}. Or user name: ${userName}.`);
@@ -20,7 +25,7 @@ function newUser(){
 
 function saveNewUser(users: Array<User>) {
     var accessTokens = users.map(u => u.access_token);
-    if(accessTokens.indexOf(user.access_token) > -1) {
+    if(accessTokens.indexOf(user.access_token) == -1) {
         users.push(user);
         saveUsers(users, undefined);
     }
@@ -54,7 +59,7 @@ function getUsers(callbackOnSuccess: Function | undefined) {
             if(callbackOnSuccess !== undefined) callbackOnSuccess(responseObject);
         }
         else {
-            console.log(`Get on ${theUrl} failed. Status: ${xmlHttp.status}.`);
+            console.log(`Get on ${theUrl} has state changed. Status: ${xmlHttp.status.toString()}.`);
         }
     }
     xmlHttp.send( undefined );

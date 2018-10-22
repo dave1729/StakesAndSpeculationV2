@@ -34,11 +34,6 @@ function ensureAccessTokenAssigned() {
         if(userExists) {
             user.access_token = accessToken || "";
         }
-        else {
-            var newUser = new User({ name: "Temp Name", access_token: accessToken });
-            user = newUser;
-            user = newUser;
-        }
     }
 }
 
@@ -56,5 +51,5 @@ function getQueryString(field: string) {
         }
     }
 
-    return null;
+    return "";
 }

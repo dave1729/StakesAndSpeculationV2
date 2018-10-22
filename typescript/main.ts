@@ -2,10 +2,9 @@ var users = Array<User>();
 getUsers(validateUserHasAccess);
 
 function validateUserHasAccess(theUsers: Array<User>) {
-    debugger;
     users = theUsers;
 
-    ensureAccessTokenAssigned();
+    findUserFromToken();
 
     var hasGotAccess = hasAccess();
     console.log("has access: " + hasGotAccess);
@@ -15,14 +14,23 @@ function validateUserHasAccess(theUsers: Array<User>) {
     }
 }
 
+function findUserFromToken() {
+    var accessToken: string = getQueryString("access_token");
+    var tokens: string[] = users.map(u => u.access_token.toString());
+    var locator = tokens.indexOf(accessToken);
+    if(locator > -1) {
+        user = users[locator];
+    }
+    else {
+        console.log("Could not find user.");
+    }
+}
+
 function hasAccess() {
     var accessTokens = users.map(u => u.access_token);
 
-    if(player != null) {
-        var accessToken = player.accessTokenOrNull();
-            if(accessToken != null) {
-            return accessTokens.indexOf(accessToken) > -1;
-        }
+    if(user != null && user.access_token != null && user.access_token !== "") {
+        return accessTokens.indexOf(user.access_token) > -1;
     }
 
     return false;
