@@ -1,4 +1,5 @@
 "use strict";
+var player;
 var Player = /** @class */ (function () {
     function Player(options) {
         var _this = this;
@@ -27,7 +28,9 @@ var Player = /** @class */ (function () {
         this.answers[questionIndex] = answer;
     };
     Player.prototype.accessTokenOrNull = function () {
-        if (this.user != null &&
+        if (this.user != undefined &&
+            this.user != null &&
+            this.user.access_token != undefined &&
             this.user.access_token != null &&
             this.user.access_token != "") {
             return this.user.access_token;

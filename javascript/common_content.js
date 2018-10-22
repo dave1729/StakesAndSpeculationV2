@@ -1,40 +1,10 @@
 "use strict";
-function shouldNotBeNull(options, lid) {
-    if (!options) {
-        throw new Error("Unexpected Null. Lid: " + lid);
-    }
-}
-function hash(value) {
-    var saltedString = "Salted" + value;
-    var hash = 0, i, chr;
-    if (saltedString.length === 0)
-        return hash;
-    for (i = 0; i < saltedString.length; i++) {
-        chr = saltedString.charCodeAt(i);
-        hash = ((hash << 5) - hash) + chr;
-        hash |= 0; // Convert to 32bit integer
-    }
-    return Math.abs(hash);
-}
-;
-var hasGotAccess = hasAccess();
-console.log("has access: " + hasGotAccess);
-if (window.location.href.indexOf("login") === -1 && !hasGotAccess) {
-    console.log("GoTo Login");
-    window.location.href = "../views/login.html";
-}
-function hasAccess() {
-    console.log("Just assigning token during has access...");
-    if (player != null && player.accessTokenOrNull() != null) {
-        return true;
-    }
-    return false;
-}
 function goTo(htmlPartialRef) {
+    ensureAccessTokenAssigned();
     var htmlRef = "../views/" + htmlPartialRef;
-    if (player != null && player.accessTokenOrNull() != null) {
+    if (user != undefined && user.accessTokenOrNull() != null) {
         console.log("Preserving player access_token.");
-        htmlRef += "?access_token=" + player.user.access_token;
+        htmlRef += "?access_token=" + user.access_token;
     }
     else {
         console.log("Not preserving player access_token. ");
@@ -50,4 +20,34 @@ function commonContent() {
             element.innerHTML = client.responseText;
     };
     client.send();
+}
+function ensureAccessTokenAssigned() {
+    var accessToken = getQueryString("access_token");
+    var urlTokenExists = accessToken != null && accessToken != "";
+    if (urlTokenExists) {
+        var userExists = user != undefined;
+        if (userExists) {
+            user.access_token = accessToken || "";
+        }
+        else {
+            var newUser = new User({ name: "Temp Name", access_token: accessToken });
+            user = newUser;
+            user = newUser;
+        }
+    }
+}
+function getQueryString(field) {
+    var queryStrings = window.location.href.split('?')[1];
+    if (queryStrings) {
+        var pairsAsArray = queryStrings.split("&");
+        if (pairsAsArray) {
+            for (var i = 0; i < pairsAsArray.length; i++) {
+                var pair = pairsAsArray[i].split("=");
+                if (pair && pair[0].toUpperCase() === field.toUpperCase()) {
+                    return pair[1];
+                }
+            }
+        }
+    }
+    return null;
 }

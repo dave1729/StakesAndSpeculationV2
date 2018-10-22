@@ -1,29 +1,29 @@
 "use strict";
-console.log("Assigning Empty Player");
-var player;
-ensureAccessTokenAssigned();
-function ensureAccessTokenAssigned() {
-    // ToDo: Get Player Info From Storage Here, using access_token. 
-    // if(player && !player.access_token)
-    // {
-    console.log("Getting token from URL");
-    var accessToken = getQueryString("access_token");
-    var newUser = new User({ name: "Temp Name", access_token: accessToken });
-    player = new Player({ user: newUser });
-    // }
+var users = Array();
+getUsers(validateUserHasAccess);
+function validateUserHasAccess(theUsers) {
+    debugger;
+    users = theUsers;
+    ensureAccessTokenAssigned();
+    var hasGotAccess = hasAccess();
+    console.log("has access: " + hasGotAccess);
+    if (window.location.href.indexOf("login") === -1 && !hasGotAccess) {
+        console.log("GoTo Login");
+        window.location.href = "../views/login.html";
+    }
 }
-function getQueryString(field) {
-    var queryStrings = window.location.href.split('?')[1];
-    if (queryStrings) {
-        var pairsAsArray = queryStrings.split("&");
-        if (pairsAsArray) {
-            for (var i = 0; i < pairsAsArray.length; i++) {
-                var pair = pairsAsArray[i].split("=");
-                if (pair && pair[0].toUpperCase() === field.toUpperCase()) {
-                    return pair[1];
-                }
-            }
+function hasAccess() {
+    var accessTokens = users.map(function (u) { return u.access_token; });
+    if (player != null) {
+        var accessToken = player.accessTokenOrNull();
+        if (accessToken != null) {
+            return accessTokens.indexOf(accessToken) > -1;
         }
     }
-    return null;
+    return false;
+}
+function shouldNotBeNull(options, lid) {
+    if (!options) {
+        throw new Error("Unexpected Null. Lid: " + lid);
+    }
 }
