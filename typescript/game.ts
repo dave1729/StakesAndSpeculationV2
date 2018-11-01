@@ -1,3 +1,5 @@
+var game: Game;
+
 class Game  {
     public id: string;
     public date: Date;
@@ -13,8 +15,7 @@ class Game  {
 
         this.date = options.date || Date.now();
 
-        this.questionIndex = options.questionIndex;
-        if(this.questionIndex == null || this.questionIndex == undefined) this.questionIndex = -1;
+        this.questionIndex = options.questionIndex || -1;
 
         this.waitingOn = options.waitingOn || "players";
 
@@ -39,5 +40,5 @@ class Game  {
         this.riddles = riddlesFromOptions;
 
         this.winner = options.winner || null;
-    } 
+    }
 }

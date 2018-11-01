@@ -5,11 +5,15 @@
   <title>Dave's Title</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
-<h1>Index Page</h1>
+<h1>Test Page</h1>
 <div id='common-content'></div>
 <body>
-  <p>Hello world! This is HTML5 Boilerplate.</p>
- </body>
+  Input Game ID: <input id="game-id-input">
+  <button id="encode-text" onclick="encodeTextInTextArea();">Encode Text</button>
+  <button id="decode-text" onclick="decodeTextInTextArea();">Decode Text</button>
+  <br>
+  <textarea id="text-area" style="width: 568px; height: 168px;"></textarea>
+</body>
  <script type="text/javascript" src="../javascript/extensions.js"></script>
  <script type="text/javascript" src="../javascript/user.js"></script>
  <script type="text/javascript" src="../javascript/bet.js"></script>
@@ -24,6 +28,7 @@
  <script type="text/javascript" src="../javascript/waiting_on.js"></script>
  <script type="text/javascript" src="../javascript/login.js"></script>
  <script type="text/javascript" src="../javascript/main.js"></script>
+ <script type="text/javascript" src="../javascript/gameboard.js"></script>
  <script type="text/javascript" src="../javascript/common_content.js"></script>
  <script type="text/javascript">commonContent();</script>
 </html>

@@ -1,13 +1,26 @@
 function goTo(htmlPartialRef: string)
 {
-    ensureAccessTokenAssigned();
-    var htmlRef = "../views/" + htmlPartialRef;
+    ensureAccessTokensAssigned();
+    var queryStrings = new Array<String>();
+
     if(user != undefined && user.accessTokenOrNull() != null) {
         console.log("Preserving player access_token.");
-        htmlRef += "?access_token=" + user.access_token;
+       queryStrings.push("access_token=" + user.access_token);
     }
-    else {
-        console.log("Not preserving player access_token. ");
+
+    if(game != undefined && !game.id.isNullOrEmpty()) {
+        console.log("Preserving player access_token.");
+        queryStrings.push("gameId=" + game.id);
+    }
+
+    var htmlRef = "../views/" + htmlPartialRef;
+
+    if(queryStrings.length > 0) {
+        htmlRef += `?${queryStrings[0]}`;
+
+        for(var i = 1; i < queryStrings.length; i++) {
+            htmlRef += `&${queryStrings[i]}`
+        }
     }
 
     window.location.href = htmlRef;
@@ -23,16 +36,27 @@ function commonContent() {
         client.send();
 }
 
-function ensureAccessTokenAssigned() {
+function ensureAccessTokensAssigned() {
     var accessToken = getQueryString("access_token");
+    var gameId = getQueryString("gameId");
     
     var urlTokenExists = accessToken != null && accessToken != "";
+    var gameIdExists = gameId != null && gameId != "";
 
     if(urlTokenExists) {
         var userExists = user != undefined;
 
         if(userExists) {
             user.access_token = accessToken || "";
+        }
+    }
+
+    debugger;
+    if(gameIdExists) {
+        var gameExists = game != undefined;
+
+        if(gameExists) {
+            game.id = gameId;
         }
     }
 }

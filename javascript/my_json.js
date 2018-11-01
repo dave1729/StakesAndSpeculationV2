@@ -3,6 +3,13 @@ function saveUsers(users, callbackOnSuccess) {
     var objectAsString = JSON.stringify(users);
     saveJson(objectAsString, MyJsonType.User, callbackOnSuccess);
 }
+function getGames(callbackOnSuccess) {
+    getJson(MyJsonType.Game, callbackOnSuccess);
+}
+function saveGames(games, callbackOnSuccess) {
+    var objectAsString = JSON.stringify(games);
+    saveJson(objectAsString, MyJsonType.Game, callbackOnSuccess);
+}
 function getJson(myJsonType, callbackOnSuccess) {
     var isAsync = true;
     var xmlHttp = new XMLHttpRequest();
@@ -43,5 +50,8 @@ function saveJson(objectAsJson, myJsonType, callbackOnSuccess) {
 function getMyJsonBinId(myJsonType) {
     if (myJsonType === MyJsonType.User) {
         return "10teas";
+    }
+    if (myJsonType === MyJsonType.Game) {
+        return "giikk";
     }
 }

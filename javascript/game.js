@@ -1,11 +1,10 @@
 "use strict";
+var game;
 var Game = /** @class */ (function () {
     function Game(options) {
         this.id = options.id || getQueryString("gameId");
         this.date = options.date || Date.now();
-        this.questionIndex = options.questionIndex;
-        if (this.questionIndex == null || this.questionIndex == undefined)
-            this.questionIndex = -1;
+        this.questionIndex = options.questionIndex || -1;
         this.waitingOn = options.waitingOn || "players";
         var thePlayers = Array();
         if (options.players && options.players.length > 0) {
