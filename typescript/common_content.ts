@@ -1,47 +1,26 @@
-function shouldNotBeNull(options: any, lid: number) {
-    if(!options) {
-        throw new Error(`Unexpected Null. Lid: ${lid}`);
-    }
-}
-
-function hash(value: string) {
-    var saltedString = `Salted${value}`;
-    var hash = 0, i, chr;
-    if (saltedString.length === 0) return hash;
-    for (i = 0; i < saltedString.length; i++) {
-      chr   = saltedString.charCodeAt(i);
-      hash  = ((hash << 5) - hash) + chr;
-      hash |= 0; // Convert to 32bit integer
-    }
-
-    return Math.abs(hash);
-};
-
-var hasGotAccess = hasAccess();
-console.log("has access: " + hasGotAccess);
-if (window.location.href.indexOf("login") === -1 && !hasGotAccess) {
-    console.log("GoTo Login");
-    window.location.href = "../views/login.html";
-}
-
-function hasAccess() {
-    console.log("Just assigning token during has access...");
-    if(player != null && player.accessTokenOrNull() != null) {
-        return true;
-    }
-
-    return false;
-}
-
 function goTo(htmlPartialRef: string)
 {
-    var htmlRef = "../views/" + htmlPartialRef;
-    if(player != null && player.accessTokenOrNull() != null) {
+    ensureAccessTokensAssigned();
+    var queryStrings = new Array<String>();
+
+    if(user != undefined && user.accessTokenOrNull() != null) {
         console.log("Preserving player access_token.");
-        htmlRef += "?access_token=" + player.user.access_token;
+       queryStrings.push("access_token=" + user.access_token);
     }
-    else {
-        console.log("Not preserving player access_token. ");
+
+    if(game != undefined && !game.id.isNullOrEmpty()) {
+        console.log("Preserving player access_token.");
+        queryStrings.push("gameId=" + game.id);
+    }
+
+    var htmlRef = "../views/" + htmlPartialRef;
+
+    if(queryStrings.length > 0) {
+        htmlRef += `?${queryStrings[0]}`;
+
+        for(var i = 1; i < queryStrings.length; i++) {
+            htmlRef += `&${queryStrings[i]}`
+        }
     }
 
     window.location.href = htmlRef;
@@ -55,4 +34,46 @@ function commonContent() {
             if (element) element.innerHTML = client.responseText;
         }
         client.send();
+}
+
+function ensureAccessTokensAssigned() {
+    var accessToken = getQueryString("access_token");
+    var gameId = getQueryString("gameId");
+    
+    var urlTokenExists = accessToken != null && accessToken != "";
+    var gameIdExists = gameId != null && gameId != "";
+
+    if(urlTokenExists) {
+        var userExists = user != undefined;
+
+        if(userExists) {
+            user.access_token = accessToken || "";
+        }
+    }
+
+    debugger;
+    if(gameIdExists) {
+        var gameExists = game != undefined;
+
+        if(gameExists) {
+            game.id = gameId;
+        }
+    }
+}
+
+function getQueryString(field: string) {
+    var queryStrings = window.location.href.split('?')[1];
+    if(queryStrings) {
+        var pairsAsArray = queryStrings.split("&");
+        if(pairsAsArray) {
+            for(var i = 0; i < pairsAsArray.length; i++) {
+                var pair = pairsAsArray[i].split("=");
+                if(pair && pair[0].toUpperCase() === field.toUpperCase()) {
+                    return pair[1];
+                }
+            }
+        }
+    }
+
+    return "";
 }

@@ -1,27 +1,61 @@
-function SaveJson(objectAsJson: string, objectTypeName: string, callbackOnSuccess: Function) {
+function saveUsers(users: Array<User>, callbackOnSuccess: Function | undefined) {
+    var objectAsString = JSON.stringify(users);
+    saveJson(objectAsString, MyJsonType.User, callbackOnSuccess)
+}
+
+function getGames(callbackOnSuccess: Function | undefined) {
+    getJson(MyJsonType.Game, callbackOnSuccess);
+}
+
+function saveGames(games: Array<Game>, callbackOnSuccess: Function | undefined) {
+    var objectAsString = JSON.stringify(games);
+    saveJson(objectAsString, MyJsonType.Game, callbackOnSuccess)
+}
+
+function getJson(myJsonType: MyJsonType, callbackOnSuccess: Function | undefined) {
+    var isAsync = true;
     var xmlHttp = new XMLHttpRequest();
-    var myJsonId = getMyJsonBinId(objectTypeName);
+    var myJsonId = getMyJsonBinId(myJsonType);
+    var theUrl = "https://api.myjson.com/bins/" + myJsonId;
+    xmlHttp.open( "GET", theUrl, isAsync ); // false for synchronous request true for async
+    xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
+        if(xmlHttp.readyState == XMLHttpRequest.DONE && xmlHttp.status == 200) {
+            console.log(`Get on ${theUrl} succeeded.`);
+            var responseObject = serializeFromJson(xmlHttp.responseText, myJsonType);
+            if(callbackOnSuccess !== undefined) callbackOnSuccess(responseObject);
+        }
+        else {
+            console.log(`Get on ${theUrl} failed. Status: ${xmlHttp.status}.`);
+        }
+    }
+    xmlHttp.send( undefined );
+}
+
+function saveJson(objectAsJson: string, myJsonType: MyJsonType, callbackOnSuccess: Function | undefined) {
+    var xmlHttp = new XMLHttpRequest();
+    var myJsonId = getMyJsonBinId(myJsonType);
     var theUrl = "https://api.myjson.com/bins/" + myJsonId;
     xmlHttp.open( "PUT", theUrl, true ); // false for synchronous request
     xmlHttp.setRequestHeader("Content-Type", "application/json");
     xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
         if(xmlHttp.readyState == XMLHttpRequest.DONE && xmlHttp.status == 200) {
-            console.log("Put Success " + xmlHttp.responseText.substr(0, 50));
-            if(callbackOnSuccess) callbackOnSuccess();
+            console.log(`Put on ${theUrl} succeeded.`);
+            if(callbackOnSuccess !== undefined) callbackOnSuccess();
         }
         else {
-            console.log("XML ReadyState: " + xmlHttp.readyState + " Status: " + xmlHttp.status);
+            console.log(`Put on ${theUrl} failed. Status: ${xmlHttp.status}.`);
         }
     }
 
     xmlHttp.send(objectAsJson);
 }
 
-function getMyJsonBinId(objectTypeName: string) {
-    if(objectTypeName.toUpperCase() == "RIDDLES") {
+function getMyJsonBinId(myJsonType: MyJsonType) {
+    if(myJsonType === MyJsonType.User) {
         return "10teas";
     }
-    else {
-        alert("Error: " + objectTypeName + " isn't a stored MyJson type.");
+
+    if(myJsonType === MyJsonType.Game) {
+        return "giikk";
     }
 }

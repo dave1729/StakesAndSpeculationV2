@@ -1,29 +1,55 @@
 "use strict";
-console.log("Assigning Empty Player");
-var player;
-ensureAccessTokenAssigned();
-function ensureAccessTokenAssigned() {
-    // ToDo: Get Player Info From Storage Here, using access_token. 
-    // if(player && !player.access_token)
-    // {
-    console.log("Getting token from URL");
-    var accessToken = getQueryString("access_token");
-    var newUser = new User({ name: "Temp Name", access_token: accessToken });
-    player = new Player({ user: newUser });
-    // }
-}
-function getQueryString(field) {
-    var queryStrings = window.location.href.split('?')[1];
-    if (queryStrings) {
-        var pairsAsArray = queryStrings.split("&");
-        if (pairsAsArray) {
-            for (var i = 0; i < pairsAsArray.length; i++) {
-                var pair = pairsAsArray[i].split("=");
-                if (pair && pair[0].toUpperCase() === field.toUpperCase()) {
-                    return pair[1];
-                }
-            }
-        }
+var users = Array();
+var games = Array();
+getGames(assignNewGames);
+getUsers(validateUserHasAccess);
+function assignNewGames(storedGames) {
+    if (games == null || games == undefined || !(games instanceof Array) || games.length < 1) {
+        games = storedGames;
     }
-    return null;
+    findGameFromToken();
+}
+function validateUserHasAccess(theUsers) {
+    users = theUsers;
+    findUserFromToken();
+    var hasGotAccess = hasAccess();
+    console.log("has access: " + hasGotAccess);
+    if (window.location.href.indexOf("login") === -1 && !hasGotAccess) {
+        console.log("GoTo Login");
+        window.location.href = "../views/login.html";
+    }
+}
+function findUserFromToken() {
+    var accessToken = getQueryString("access_token");
+    var tokens = users.map(function (u) { return u.access_token.toString(); });
+    var locator = tokens.indexOf(accessToken);
+    if (locator > -1) {
+        user = users[locator];
+    }
+    else {
+        console.log("Could not find user.");
+    }
+}
+function findGameFromToken() {
+    var gameId = getQueryString("gameId");
+    var gameIds = games.map(function (g) { return g.id.toString(); });
+    var locator = gameIds.indexOf(gameId);
+    if (locator > -1) {
+        game = games[locator];
+    }
+    else {
+        console.log("Could not find game.");
+    }
+}
+function hasAccess() {
+    var accessTokens = users.map(function (u) { return u.access_token; });
+    if (user != null && user.access_token != null && user.access_token !== "") {
+        return accessTokens.indexOf(user.access_token) > -1;
+    }
+    return false;
+}
+function shouldNotBeNull(options, lid) {
+    if (!options) {
+        throw new Error("Unexpected Null. Lid: " + lid);
+    }
 }

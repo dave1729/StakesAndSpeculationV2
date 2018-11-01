@@ -1,3 +1,4 @@
+var player: Player;
 class Player {
     public user: User;
     public color: string;
@@ -33,7 +34,9 @@ class Player {
     }
 
     accessTokenOrNull() {
-        if(this.user != null &&
+        if(this.user != undefined &&
+           this.user != null &&
+           this.user.access_token != undefined &&
            this.user.access_token != null &&
            this.user.access_token != "") {
                 return this.user.access_token;
