@@ -23,7 +23,9 @@ function createGame() {
 }
 function encodeTextInTextArea() {
     var element = document.getElementById("text-area");
-    element.value = encodeText(element.value);
+    var encodedText = encodeText(element.value);
+    element.value = encodedText;
+    saveSessionDescriptions(new Array(encodedText), undefined);
 }
 function encodeText(text) {
     var result = "";
@@ -35,8 +37,11 @@ function encodeText(text) {
     return result;
 }
 function decodeTextInTextArea() {
+    getSessionDescriptions(decodeTextInTextArea2);
+}
+function decodeTextInTextArea2(text) {
     var element = document.getElementById("text-area");
-    element.value = decodeText(element.value);
+    element.value = decodeText(text[0]);
 }
 function decodeText(text) {
     var result = "";

@@ -1,5 +1,6 @@
 enum MyJsonType {
     User,
     Game,
-    Riddle
+    Riddle,
+    RtcSessionDescription
 }

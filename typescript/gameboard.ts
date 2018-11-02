@@ -29,7 +29,9 @@ function createGame() {
 
 function encodeTextInTextArea() {
     var element = <HTMLTextAreaElement> document.getElementById("text-area");
-    element.value = encodeText(element.value);
+    var encodedText = encodeText(element.value);
+    element.value = encodedText;
+    saveSessionDescriptions(new Array<string>(encodedText), undefined);
 }
 
 function encodeText(text: string) {
@@ -43,8 +45,12 @@ function encodeText(text: string) {
 }
 
 function decodeTextInTextArea() {
+    getSessionDescriptions(decodeTextInTextArea2);
+}
+
+function decodeTextInTextArea2(text: Array<string>) {
     var element = <HTMLTextAreaElement> document.getElementById("text-area");
-    element.value = decodeText(element.value);
+    element.value = decodeText(text[0]);
 }
 
 function decodeText(text: string) {

@@ -10,6 +10,13 @@ function saveGames(games, callbackOnSuccess) {
     var objectAsString = JSON.stringify(games);
     saveJson(objectAsString, MyJsonType.Game, callbackOnSuccess);
 }
+function getSessionDescriptions(callbackOnSuccess) {
+    getJson(MyJsonType.RtcSessionDescription, callbackOnSuccess);
+}
+function saveSessionDescriptions(descriptions, callbackOnSuccess) {
+    var objectAsString = JSON.stringify(descriptions);
+    saveJson(objectAsString, MyJsonType.RtcSessionDescription, callbackOnSuccess);
+}
 function getJson(myJsonType, callbackOnSuccess) {
     var isAsync = true;
     var xmlHttp = new XMLHttpRequest();
@@ -53,5 +60,8 @@ function getMyJsonBinId(myJsonType) {
     }
     if (myJsonType === MyJsonType.Game) {
         return "giikk";
+    }
+    if (myJsonType === MyJsonType.RtcSessionDescription) {
+        return "12uhh0";
     }
 }

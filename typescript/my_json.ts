@@ -12,6 +12,15 @@ function saveGames(games: Array<Game>, callbackOnSuccess: Function | undefined) 
     saveJson(objectAsString, MyJsonType.Game, callbackOnSuccess)
 }
 
+function getSessionDescriptions(callbackOnSuccess: Function | undefined) {
+    getJson(MyJsonType.RtcSessionDescription, callbackOnSuccess);
+}
+
+function saveSessionDescriptions(descriptions: Array<string>, callbackOnSuccess: Function | undefined) {
+    var objectAsString = JSON.stringify(descriptions);
+    saveJson(objectAsString, MyJsonType.RtcSessionDescription, callbackOnSuccess)
+}
+
 function getJson(myJsonType: MyJsonType, callbackOnSuccess: Function | undefined) {
     var isAsync = true;
     var xmlHttp = new XMLHttpRequest();
@@ -57,5 +66,9 @@ function getMyJsonBinId(myJsonType: MyJsonType) {
 
     if(myJsonType === MyJsonType.Game) {
         return "giikk";
+    }
+
+    if(myJsonType === MyJsonType.RtcSessionDescription) {
+        return "12uhh0";
     }
 }

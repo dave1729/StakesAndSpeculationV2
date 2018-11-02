@@ -23,6 +23,13 @@ function serializeFromJson(responseText: string, myJsonType: MyJsonType) {
         });
         return games;
     }
+    else if(myJsonType === MyJsonType.RtcSessionDescription) {
+        var strings = Array<string>();
+        responseObject.forEach(function(s: any){
+            strings.push(s);
+        });
+        return strings;
+    }
     else {
         return null;
     }

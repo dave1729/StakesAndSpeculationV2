@@ -51,7 +51,6 @@ function ensureAccessTokensAssigned() {
         }
     }
 
-    debugger;
     if(gameIdExists) {
         var gameExists = game != undefined;
 

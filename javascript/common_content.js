@@ -40,7 +40,6 @@ function ensureAccessTokensAssigned() {
             user.access_token = accessToken || "";
         }
     }
-    debugger;
     if (gameIdExists) {
         var gameExists = game != undefined;
         if (gameExists) {
