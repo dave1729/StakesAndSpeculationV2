@@ -33,7 +33,7 @@ function getJson(myJsonType: MyJsonType, callbackOnSuccess: Function | undefined
             var responseObject = serializeFromJson(xmlHttp.responseText, myJsonType);
             if(callbackOnSuccess !== undefined) callbackOnSuccess(responseObject);
         }
-        else {
+        else if (xmlHttp.status !== 200){
             console.log(`Get on ${theUrl} failed. Status: ${xmlHttp.status}.`);
         }
     }
@@ -47,11 +47,11 @@ function saveJson(objectAsJson: string, myJsonType: MyJsonType, callbackOnSucces
     xmlHttp.open( "PUT", theUrl, true ); // false for synchronous request
     xmlHttp.setRequestHeader("Content-Type", "application/json");
     xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
-        if(xmlHttp.readyState == XMLHttpRequest.DONE && xmlHttp.status == 200) {
+        if(xmlHttp.readyState == XMLHttpRequest.DONE && xmlHttp.status === 200) {
             console.log(`Put on ${theUrl} succeeded.`);
             if(callbackOnSuccess !== undefined) callbackOnSuccess();
         }
-        else {
+        else if (xmlHttp.status !== 200){
             console.log(`Put on ${theUrl} failed. Status: ${xmlHttp.status}.`);
         }
     }

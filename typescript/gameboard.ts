@@ -28,18 +28,25 @@ function createGame() {
 }
 
 function encodeTextInTextArea() {
+    if(game == undefined || game.id.isNullOrEmpty()) {
+        alert("Cannot encode without game ID.");
+    }
+
+    console.log(`Ciphering with ${game.id}`);
     var element = <HTMLTextAreaElement> document.getElementById("text-area");
-    var encodedText = encodeText(element.value);
+    var encodedText = encodeText(element.value, game.id);
+    console.log(`Encoded. ${encodedText}`);
     element.value = encodedText;
     saveSessionDescriptions(new Array<string>(encodedText), undefined);
 }
 
-function encodeText(text: string) {
+function encodeText(text: string, cipherKey: string) {
     var result = "";
+    var cipherSeries = new CipherSeries(cipherKey);
     for(var i = 0 ; i < text.length; i++) {
         var code = text.charCodeAt(i);
         console.log(`charcode ${code}`);
-        result += String.fromCharCode(code + 11);
+        result += String.fromCharCode(code + cipherSeries.getNext());
     }
     return result;
 }
@@ -49,15 +56,21 @@ function decodeTextInTextArea() {
 }
 
 function decodeTextInTextArea2(text: Array<string>) {
+    if(game == undefined || game.id.isNullOrEmpty()) {
+        alert("Cannot encode without game ID.");
+    }
+
+    console.log(`Ciphering with ${game.id}`);
     var element = <HTMLTextAreaElement> document.getElementById("text-area");
-    element.value = decodeText(text[0]);
+    element.value = decodeText(text[0], game.id);
 }
 
-function decodeText(text: string) {
+function decodeText(text: string, cipherKey: string) {
     var result = "";
+    var cipherSeries = new CipherSeries(cipherKey);
     for(var i = 0 ; i < text.length; i++) {
         var code = text.charCodeAt(i);
-        result += String.fromCharCode(code - 11);
+        result += String.fromCharCode(code - cipherSeries.getNext());
     }
     return result;
 }

@@ -8,4 +8,4 @@ pc.createOffer().then(function(e) {
 //   if (e.data) addMSG(e.data, "other");
 // }
 var localDescriptionAsString = JSON.stringify(pc.localDescription);
-console.log(localDescriptionAsString);
+
