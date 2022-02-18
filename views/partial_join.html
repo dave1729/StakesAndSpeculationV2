@@ -35,7 +35,7 @@ pc.oniceconnectionstatechange = function(e) {
 };
 function dcInit(dc) {
   dc.onopen    = function()  {$("textarea").attr("disabled",true);addMSG("CONNECTED!", "info")};
-  dc.onmessage = function(e) {if (e.data) addMSG(e.data, "other");}
+  dc.onmessage = function(e) {if (e.data) addMSG(e.data, "other: ");}
 }
 function createAnswerSDP() {
   var offerDesc = new RTCSessionDescription(JSON.parse($("#creater-sdp").val()));
@@ -49,7 +49,7 @@ var sendMSG = function() {
   var value = $("#msg").val();
   if (value) {
     dc.send(value);
-    addMSG(value, "me");
+    addMSG(value, "me: ");
     $("#msg").val('');
   }
 }

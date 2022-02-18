@@ -35,7 +35,7 @@
       });
       dc.onopen = function(){$("textarea").attr("disabled",true);addMSG("CONNECTED!", "info")};
       dc.onmessage = function(e) {
-        if (e.data) addMSG(e.data, "other");
+        if (e.data) addMSG(e.data, "other: ");
       }
     };
     function start() {
@@ -55,7 +55,7 @@
       var value = $("#msg").val();
       if (value) {
         dc.send(value);
-        addMSG(value, "me");
+        addMSG(value, "me: ");
         $("#msg").val('');
       }
     }
