@@ -12,9 +12,9 @@ function goTo(htmlPartialRef) {
     }
     var htmlRef = "../views/" + htmlPartialRef;
     if (queryStrings.length > 0) {
-        htmlRef += "?" + queryStrings[0];
+        htmlRef += "?".concat(queryStrings[0]);
         for (var i = 1; i < queryStrings.length; i++) {
-            htmlRef += "&" + queryStrings[i];
+            htmlRef += "&".concat(queryStrings[i]);
         }
     }
     window.location.href = htmlRef;

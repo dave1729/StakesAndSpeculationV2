@@ -9,21 +9,23 @@ function newUser() {
         var saltedPasswordHash = hash(password);
         user = new User({ name: userName, access_token: saltedPasswordHash });
         if (users == null || users == undefined) {
+            console.log("Getting users.");
             getUsers(saveNewUser);
         }
         else {
+            console.log("Saving Users.");
             saveNewUser(users);
         }
     }
     else {
-        alert("Bad Password: " + password + ". Or user name: " + userName + ".");
+        alert("Bad Password: ".concat(password, ". Or user name: ").concat(userName, "."));
     }
 }
 function saveNewUser(users) {
     var accessTokens = users.map(function (u) { return u.access_token; });
     if (accessTokens.indexOf(user.access_token) == -1) {
         // Add to make every login attempt create a new account
-        // users.push(user);
+        users.push(user);
         console.log("Bad username or password.");
         saveUsers(users, undefined);
     }
@@ -32,7 +34,7 @@ function saveNewUser(users) {
     }
 }
 function hash(value) {
-    var saltedString = "Salted" + value;
+    var saltedString = "Salted".concat(value);
     var hash = 0, i, chr;
     if (saltedString.length === 0)
         return hash;
@@ -44,24 +46,6 @@ function hash(value) {
     return Math.abs(hash);
 }
 ;
-function getUsers(callbackOnSuccess) {
-    var isAsync = true;
-    var xmlHttp = new XMLHttpRequest();
-    var theUrl = "https://api.myjson.com/bins/10teas";
-    xmlHttp.open("GET", theUrl, isAsync); // false for synchronous request true for async
-    xmlHttp.onreadystatechange = function () {
-        if (xmlHttp.readyState == XMLHttpRequest.DONE && xmlHttp.status == 200) {
-            console.log("Get on " + theUrl + " succeeded.");
-            var responseObject = serializeUsersFromJson(xmlHttp.responseText);
-            if (callbackOnSuccess !== undefined)
-                callbackOnSuccess(responseObject);
-        }
-        else {
-            console.log("Get on " + theUrl + " has state changed. Status: " + xmlHttp.status.toString() + ".");
-        }
-    };
-    xmlHttp.send(undefined);
-}
 function serializeUsersFromJson(responseText) {
     if (responseText.length <= 0)
         console.log("Response Test is Empty.");

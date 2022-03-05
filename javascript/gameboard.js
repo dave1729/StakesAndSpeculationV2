@@ -5,7 +5,7 @@ function generateGameId() {
 function createGame() {
     if (game != null && !game.id.isNullOrEmpty()) {
         var element = document.getElementById("game-id");
-        element.innerText = "Already in Game: " + game.id;
+        element.innerText = "Already in Game: ".concat(game.id);
         return;
     }
     var newId = generateGameId();
@@ -25,10 +25,10 @@ function encodeTextInTextArea() {
     if (game == undefined || game.id.isNullOrEmpty()) {
         alert("Cannot encode without game ID.");
     }
-    console.log("Ciphering with " + game.id);
+    console.log("Ciphering with ".concat(game.id));
     var element = document.getElementById("text-area");
     var encodedText = encodeText(element.value, game.id);
-    console.log("Encoded. " + encodedText);
+    console.log("Encoded. ".concat(encodedText));
     element.value = encodedText;
     saveSessionDescriptions(new Array(encodedText), undefined);
 }
@@ -37,7 +37,7 @@ function encodeText(text, cipherKey) {
     var cipherSeries = new CipherSeries(cipherKey);
     for (var i = 0; i < text.length; i++) {
         var code = text.charCodeAt(i);
-        console.log("charcode " + code);
+        console.log("charcode ".concat(code));
         result += String.fromCharCode(code + cipherSeries.getNext());
     }
     return result;
@@ -49,7 +49,7 @@ function decodeTextInTextArea2(text) {
     if (game == undefined || game.id.isNullOrEmpty()) {
         alert("Cannot encode without game ID.");
     }
-    console.log("Ciphering with " + game.id);
+    console.log("Ciphering with ".concat(game.id));
     var element = document.getElementById("text-area");
     element.value = decodeText(text[0], game.id);
 }

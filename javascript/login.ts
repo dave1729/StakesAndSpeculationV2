@@ -9,14 +9,12 @@ function newUser(){
         console.log("password and name accepted.");
         var saltedPasswordHash = hash(password);
 
-        user = new User({ name: userName, access_token: saltedPasswordHash });\
+        user = new User({ name: userName, access_token: saltedPasswordHash });
 
         if(users == null || users == undefined) {
-            console.log("Getting users.");
             getUsers(saveNewUser);
         }
         else {
-            console.log("Saving Users.");
             saveNewUser(users);
         }
     }
@@ -30,8 +28,8 @@ function saveNewUser(users: Array<User>) {
     if(accessTokens.indexOf(user.access_token) == -1) {
 
         // Add to make every login attempt create a new account
-        users.push(user);
-        console.log("Saving new user.");
+        // users.push(user);
+        console.log("Bad username or password.");
         saveUsers(users, undefined);
     }
     else {

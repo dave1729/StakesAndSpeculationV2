@@ -50,6 +50,6 @@ function hasAccess() {
 }
 function shouldNotBeNull(options, lid) {
     if (!options) {
-        throw new Error("Unexpected Null. Lid: " + lid);
+        throw new Error("Unexpected Null. Lid: ".concat(lid));
     }
 }

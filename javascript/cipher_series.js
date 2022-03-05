@@ -2,7 +2,7 @@
 var CipherSeries = /** @class */ (function () {
     function CipherSeries(secret) {
         if (secret == "" || secret.length < 2) {
-            throw new Error("Invalid secret for Cipher. Value: " + secret);
+            throw new Error("Invalid secret for Cipher. Value: ".concat(secret));
         }
         this.cipherValues = this.createCipherValues(secret);
         this.index = this.cipherValues.length - 1;
@@ -46,7 +46,7 @@ var CipherSeries = /** @class */ (function () {
                             hashPart4 :
                             hashPart1;
             var newChar = String.fromCharCode(hashPart * secret.charCodeAt(i));
-            secret = "" + secret + newChar;
+            secret = "".concat(secret).concat(newChar);
         }
         return secret;
     };
