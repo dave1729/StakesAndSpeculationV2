@@ -9,7 +9,7 @@ function newUser(){
         console.log("password and name accepted.");
         var saltedPasswordHash = hash(password);
 
-        user = new User({ name: userName, access_token: saltedPasswordHash });\
+        user = new User({ name: userName, access_token: saltedPasswordHash });
 
         if(users == null || users == undefined) {
             console.log("Getting users.");

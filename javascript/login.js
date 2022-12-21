@@ -26,7 +26,7 @@ function saveNewUser(users) {
     if (accessTokens.indexOf(user.access_token) == -1) {
         // Add to make every login attempt create a new account
         users.push(user);
-        console.log("Bad username or password.");
+        console.log("Saving new user.");
         saveUsers(users, undefined);
     }
     else {
